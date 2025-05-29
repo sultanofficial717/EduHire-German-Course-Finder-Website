@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Course Finder</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Animate.css for animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+    <!-- Custom Styles -->
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(255,255,255,0.25);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+            backdrop-filter: blur(11px);
+            -webkit-backdrop-filter: blur(11px);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.23);
+            transition: box-shadow 0.3s;
+        }
+        .glass-card:hover {
+            box-shadow: 0 16px 48px 0 rgba(76, 63, 196, 0.20);
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .btn-gradient {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border: none;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 14px 0 rgba(118, 75, 162, 0.15);
+            transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-gradient:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px #ff6b6b44;
+        }
+        .btn-gradient:hover, .btn-gradient:active {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 8px 24px 0 rgba(118, 75, 162, 0.23);
+            background: linear-gradient(90deg, #764ba2 0%, #667eea 100%);
+        }
+        .btn-gradient.pulse {
+            animation: pulse-btn 1.2s infinite;
+        }
+        @keyframes pulse-btn {
+            0% { box-shadow: 0 0 0 0 rgba(255,107,107,0.25);}
+            70% { box-shadow: 0 0 0 12px rgba(255,107,107,0);}
+            100% { box-shadow: 0 0 0 0 rgba(255,107,107,0.25);}
+        }
+        .form-label {
+            font-weight: 500;
+            letter-spacing: 0.04em;
+        }
+        .form-control, .form-select {
+            border-radius: 0.7rem;
+            border: 1px solid #e0e2e8;
+            background: rgba(255,255,255,0.7);
+            transition: box-shadow 0.2s;
+        }
+        .form-control:focus, .form-select:focus {
+            box-shadow: 0 0 0 2px #667eea33;
+            border-color: #764ba2;
+        }
+        .alert {
+            border-radius: 0.7rem;
+            border: none;
+        }
+        .nav-link {
+            color: #667eea;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.2s;
+        }
+        .nav-link:hover, .nav-link:focus {
+            color: #ff6b6b;
+        }
+        .nav-link::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #ff6b6b 0%, #764ba2 100%);
+            transition: width 0.25s;
+            position: absolute;
+            left: 0;
+            bottom: -3px;
+        }
+        .nav-link:hover::after, .nav-link:focus::after {
+            width: 100%;
+        }
+        .card-icon {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border-radius: 50%;
+            padding: 0.6rem 0.8rem;
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            box-shadow: 0 3px 8px 0 rgba(118,75,162,0.16);
+        }
+        .badge-coral {
+            background: #ff6b6b;
+            color: #fff;
+            border-radius: 0.75rem;
+            font-size: 0.85em;
+            margin-left: 0.4em;
+        }
+        /* Responsive Typography */
+        h2.gradient-text {
+            font-size: 2.3rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        @media (max-width: 576px) {
+            .glass-card {
+                padding: 1rem!important;
+            }
+            h2.gradient-text {
+                font-size: 1.5rem;
+            }
+            h4 {
+                font-size: 1.15rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container mt-5 animate__animated animate__fadeIn">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="card glass-card shadow animate__animated animate__fadeInUp">
+                    <div class="card-body p-4">
+                        <div class="text-center mb-4">
+                            <span class="card-icon animate__animated animate__pulse animate__infinite"><i class="fas fa-user-plus"></i></span>
+                            <h2 class="gradient-text mb-1">Course Finder</h2>
+                            <span class="badge badge-coral">Signup</span>
+                        </div>
+                        <h4 class="text-center mb-4">Register</h4>
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                                {% for category, message in messages %}
+                                    <div class="alert alert-{{ category }} alert-dismissible fade show animate__animated animate__fadeInDown" role="alert">
+                                        <i class="fas fa-info-circle me-2"></i>{{ message }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                        <form method="POST" action="{{ url_for('register') }}" class="animate__animated animate__fadeIn">
+                            <div class="mb-3">
+                                <label for="username" class="form-label"><i class="fas fa-user me-1"></i>Username</label>
+                                <input type="text" class="form-control" id="username" name="username" required autocomplete="username">
+                            </div>
+                            <div class="mb-3">
+                                <label for="name" class="form-label"><i class="fas fa-id-badge me-1"></i>Full Name</label>
+                                <input type="text" class="form-control" id="name" name="name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label"><i class="fas fa-lock me-1"></i>Password</label>
+                                <input type="password" class="form-control" id="password" name="password" required autocomplete="new-password">
+                            </div>
+                            {% if session.get('role') == 'admin' %}
+                            <div class="mb-3">
+                                <label for="role" class="form-label"><i class="fas fa-user-tag me-1"></i>Role</label>
+                                <select class="form-select" id="role" name="role">
+                                    <option value="user" selected>User</option>
+                                    <option value="admin">Admin</option>
+                                </select>
+                            </div>
+                            {% endif %}
+                            <button type="submit" class="btn btn-gradient w-100 pulse" id="registerBtn">
+                                <i class="fas fa-user-plus me-2"></i>Register
+                            </button>
+                        </form>
+                        <div class="mt-3 text-center animate__animated animate__fadeInUp animate__delay-1s">
+                            <p>Already have an account? 
+                                <a href="{{ url_for('login') }}" class="nav-link d-inline p-0">Login <i class="fas fa-sign-in-alt"></i></a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Ripple Effect for Buttons -->
+    <script>
+        // Ripple effect for the register button
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.btn-gradient').forEach(btn => {
+                btn.addEventListener('click', function (e) {
+                    let ripple = document.createElement('span');
+                    ripple.className = 'ripple';
+                    this.appendChild(ripple);
+
+                    let max = Math.max(this.offsetWidth, this.offsetHeight);
+                    ripple.style.width = ripple.style.height = max + 'px';
+
+                    let rect = this.getBoundingClientRect();
+                    ripple.style.left = e.clientX - rect.left - max / 2 + 'px';
+                    ripple.style.top = e.clientY - rect.top - max / 2 + 'px';
+
+                    setTimeout(() => ripple.remove(), 700);
+                });
+            });
+        });
+    </script>
+    <style>
+        /* Ripple Effect */
+        .btn-gradient {
+            position: relative;
+            overflow: hidden;
+        }
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple-animate 0.7s linear;
+            background: rgba(255, 107, 107, 0.33);
+            pointer-events: none;
+            z-index: 1;
+        }
+        @keyframes ripple-animate {
+            to {
+                transform: scale(2.7);
+                opacity: 0;
+            }
+        }
+    </style>
+</body>
+</html>

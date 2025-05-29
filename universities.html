@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universities - EduHire</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --accent-color: #ff6b6b;
+            --glass-bg: rgba(255,255,255,0.25);
+            --glass-blur: blur(12px);
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+            --card-shadow: 0 4px 24px 0 rgba(31, 38, 135, 0.10);
+            --border-radius: 1.2rem;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--secondary-gradient);
+            font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+        }
+
+        .navbar {
+            background: var(--primary-gradient) !important;
+            box-shadow: var(--shadow);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 2rem;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            margin: 0 0.5rem;
+            position: relative;
+            color: rgba(255,255,255,0.9) !important;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #fff !important;
+            transform: translateY(-2px) scale(1.08);
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background: var(--accent-color);
+            transition: width 0.3s;
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        .glass-container {
+            background: var(--glass-bg);
+            box-shadow: var(--shadow);
+            border-radius: var(--border-radius);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            padding: 2.5rem 2rem 2rem 2rem;
+            margin-top: 2.5rem;
+        }
+
+        .gradient-heading {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2rem;
+            letter-spacing: 1px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.7);
+            border: none;
+            border-radius: 1.2rem;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.18s, box-shadow 0.18s;
+            overflow: hidden;
+        }
+        .card:hover {
+            transform: translateY(-6px) scale(1.025);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #4a4e69;
+        }
+
+        .card-text {
+            color: #212529;
+            font-size: 1rem;
+        }
+
+        .btn-outline-primary {
+            border-radius: 2rem;
+            border-width: 2px;
+            font-weight: 600;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .btn-outline-primary:focus {
+            outline: none;
+            box-shadow: 0 0 0 0.2rem #764ba2;
+        }
+        .btn-outline-primary:hover {
+            background: var(--accent-color);
+            color: #fff;
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 16px 0 rgba(255,107,107,0.15);
+            transform: scale(1.04);
+        }
+        .btn-outline-primary:active {
+            animation: pulse 0.3s;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 var(--accent-color); }
+            70% { box-shadow: 0 0 0 10px rgba(255,107,107,0); }
+            100% { box-shadow: 0 0 0 0 rgba(255,107,107,0); }
+        }
+
+        /* Ripple effect */
+        .ripple-effect {
+            position: absolute;
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            background-color: rgba(255,107,107,0.4);
+            pointer-events: none;
+            z-index: 2;
+        }
+        @keyframes ripple {
+            to {
+                transform: scale(2.5);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive Typography */
+        @media (max-width: 768px) {
+            .gradient-heading {
+                font-size: 2rem;
+            }
+            .glass-container {
+                padding: 1.2rem 0.5rem;
+            }
+        }
+        /* Side panel styling */
+        .side-panel {
+            min-width: 200px;
+            background: rgba(255,255,255,0.7);
+            box-shadow: var(--card-shadow);
+            border-radius: 1.2rem;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+        }
+        @media (max-width: 991px) {
+            .side-panel {
+                height: auto;
+                min-width: 100%;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark animate__animated animate__fadeInDown">
+        <div class="container">
+            <a class="navbar-brand animate__animated animate__fadeInLeft" href="#">
+                <span style="
+                    background: linear-gradient(90deg, #fff 40%, #667eea 60%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    font-weight: 900;
+                    letter-spacing: 2px;
+                    filter: drop-shadow(0 1px 2px #764ba2);
+                    ">
+                    Edu
+                </span>
+                <span style="
+                    background: linear-gradient(90deg, #ff6b6b 0%, #764ba2 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    font-weight: 900;
+                    letter-spacing: 2px;
+                    filter: drop-shadow(0 1px 2px #fff);
+                    ">
+                    Hire
+                </span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse animate__animated animate__fadeIn" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item animate__animated animate__fadeInDown animate__delay-1s">
+                        <a class="nav-link" href="{{ url_for('landing') }}"><i class="fas fa-home me-1"></i> Home</a>
+                    </li>
+                    <li class="nav-item animate__animated animate__fadeInDown animate__delay-2s">
+                        <a class="nav-link" href="{{ url_for('courses') }}"><i class="fas fa-book me-1"></i> Courses</a>
+                    </li>
+                    <li class="nav-item animate__animated animate__fadeInDown animate__delay-3s">
+                        <a class="nav-link active" href="{{ url_for('universities') }}"><i class="fas fa-university me-1"></i> Universities</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item animate__animated animate__fadeIn">
+                        <span class="navbar-text me-3"><i class="fas fa-user-circle me-2"></i>Welcome, {{ username }}</span>
+                    </li>
+                    <li class="nav-item animate__animated animate__fadeIn">
+                        <a class="btn btn-outline-light" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt me-1"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Side Panel -->
+            <div class="col-md-2 side-panel d-flex flex-column align-items-start pt-4">
+                <button class="btn btn-outline-primary w-100 mb-3 animate__animated animate__fadeInLeft animate__delay-1s" data-bs-toggle="modal" data-bs-target="#profileModal">
+                    <i class="fas fa-user-circle me-2"></i>Profile
+                </button>
+                <button class="btn btn-outline-success w-100 animate__animated animate__fadeInLeft animate__delay-2s" data-bs-toggle="modal" data-bs-target="#savedCoursesModal">
+                    <i class="fas fa-bookmark me-2"></i>Saved Courses
+                </button>
+            </div>
+            <!-- Main Content -->
+            <div class="col-md-10">
+                <div class="glass-container animate__animated animate__fadeInUp">
+                    <h1 class="gradient-heading text-center mb-4">Universities</h1>
+                    <div class="row">
+                        {% for university in universities %}
+                        <div class="col-md-4 mb-4">
+<div class="card h-100 animate__animated animate__fadeInUp" {% if loop and loop.index0 is defined %}style="animation-delay: {{ '%0.2f'|format(loop.index0 * 0.1) }}s;"{% endif %}>
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title mb-2"><i class="fas fa-university me-2 text-primary"></i>{{ university.name }}</h5>
+                                    <span class="badge rounded-pill bg-primary mb-2" style="background: var(--primary-gradient); color: #fff; font-size: 0.95rem;">
+                                        <i class="fas fa-map-marker-alt me-1"></i> {{ university.location }}
+                                    </span>
+                                    <a href="{{ university.website }}" class="btn btn-outline-primary mt-auto ripple-btn" target="_blank">
+                                        <i class="fas fa-globe me-1"></i> Visit Website
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="profileModalLabel">Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Username:</strong> {{ user.username }}</p>
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    <p><strong>Account Created:</strong> {{ user.created_at.strftime('%Y-%m-%d') }}</p>
+                    <p><strong>Member for:</strong>
+                        {% set days = (now() - user.created_at).days %}
+                        {{ days }} day{{ 's' if days != 1 else '' }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Saved Courses Modal -->
+    <div class="modal fade" id="savedCoursesModal" tabindex="-1" aria-labelledby="savedCoursesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="savedCoursesModalLabel">Saved Courses</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% if saved_programs %}
+                        <ul class="list-group">
+                            {% for program in saved_programs %}
+                                <li class="list-group-item">
+                                    <h6>{{ program.name }}</h6>
+                                    <p>
+                                        {% if program.university_name %}{{ program.university_name }}{% endif %}
+                                        {% if program.degree_type %} | {{ program.degree_type }}{% endif %}
+                                        {% if program.language %} | {{ program.language }}{% endif %}
+                                    </p>
+                                    {% if program.duration %}
+                                        <p><strong>Duration:</strong> {{ program.duration }}</p>
+                                    {% endif %}
+                                    {% if program.description %}
+                                        <p><strong>Description:</strong> {{ program.description }}</p>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No saved courses found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">© 2023 EduHire. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Ripple effect for buttons
+        document.querySelectorAll('.ripple-btn').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                const rect = btn.getBoundingClientRect();
+                const ripple = document.createElement('span');
+                const size = Math.max(rect.width, rect.height);
+                ripple.className = 'ripple-effect';
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+                ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+                btn.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+    </script>
+</body>
+</html>

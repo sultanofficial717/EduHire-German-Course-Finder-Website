@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Finder - Available Programs</title>
+    <!-- Bootstrap, Animate.css, Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --accent-color: #ff6b6b;
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+            --light-bg: #f5f7fa;
+            --glass-bg: rgba(255,255,255,0.63);
+        }
+        body {
+            background: var(--secondary-gradient);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #212529;
+        }
+        .navbar {
+            background: var(--primary-gradient)!important;
+            box-shadow: var(--shadow);
+        }
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            background: linear-gradient(to right, #ffffff, #e0e0e0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: 0.3s;
+            letter-spacing: 2px;
+        }
+        .navbar-brand:hover {
+            transform: scale(1.05);
+        }
+        .nav-welcome {
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-right: 1rem;
+        }
+        .btn-outline-light {
+            border-radius: 22px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+        .search-box, .filter-section {
+            background: var(--glass-bg);
+            box-shadow: 0 4px 24px rgba(118, 75, 162, 0.10);
+            border-radius: 1rem;
+            padding: 1.2rem;
+            margin-bottom: 1.3rem;
+            backdrop-filter: blur(9px);
+            -webkit-backdrop-filter: blur(9px);
+            transition: box-shadow 0.3s;
+        }
+        .search-box:focus-within,
+        .filter-section:focus-within {
+            box-shadow: 0 6px 32px rgba(102, 126, 234, 0.21);
+        }
+        .filter-section h5, .filter-section h6 {
+            font-weight: 700;
+        }
+        .filter-section h6 {
+            font-size: 1rem;
+        }
+        .card {
+            border: none;
+            border-radius: 1.25rem;
+            background: var(--glass-bg);
+            box-shadow: 0 4px 20px rgba(118, 75, 162, 0.08);
+            transition: transform 0.25s, box-shadow 0.25s;
+            height: 100%;
+        }
+        .card:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 10px 30px rgba(118, 75, 162, 0.23);
+        }
+        .card-title {
+            color: #764ba2;
+            font-weight: 700;
+        }
+        .badge-field {
+            background: #e9f0fa;
+            color: #667eea;
+            font-weight: 600;
+            border-radius: 0.6rem;
+            padding: 0.4em 0.85em;
+            font-size: 0.85em;
+        }
+        .btn-outline-primary,
+        .btn-save {
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.18s cubic-bezier(0.4,0.0,0.2,1);
+        }
+        .btn-save.saved {
+            background-color: #28a745;
+            color: white;
+            box-shadow: 0 0 0 2px #28a74533;
+        }
+        .btn-save:not(.saved):hover,
+        .btn-outline-secondary:hover {
+            background: var(--primary-gradient);
+            color: #fff;
+            border: none;
+            transform: translateY(-2px) scale(1.04);
+        }
+        .btn-outline-primary:hover {
+            background: var(--primary-gradient);
+            color: #fff;
+            border: none;
+            transform: translateY(-2px) scale(1.04);
+        }
+        .program-description {
+            color: #495057;
+            font-size: 0.98rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .form-check-input:checked {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+        .form-check-input:focus {
+            box-shadow: 0 0 0 3px #ff6b6b22;
+        }
+        .filter-label {
+            margin-left: 5px;
+            font-size: 1em;
+        }
+        .alert {
+            border-radius: 0.8rem;
+            border: none;
+            box-shadow: 0 2px 10px rgba(255,107,107,0.09);
+        }
+        .pagination .page-item.active .page-link {
+            background: var(--primary-gradient);
+            border: none;
+            color: #fff;
+            font-weight: 700;
+        }
+        .pagination .page-link {
+            border-radius: 0.6rem;
+            color: #764ba2;
+        }
+        .pagination .page-link:hover {
+            color: #fff;
+            background: var(--primary-gradient);
+            border: none;
+        }
+        /* Animate.css integration */
+        .animate__animated { animation-duration: 1.1s; }
+        /* Responsive */
+        @media (max-width: 991px) {
+            .filter-section { margin-bottom: 2rem; }
+        }
+        @media (max-width: 768px) {
+            .search-box, .filter-section { padding: 0.8rem; }
+            .card { margin-bottom: 1rem; }
+        }
+        /* Add these new styles to your existing style section */
+        .filter-section {
+            background: var(--glass-bg);
+            box-shadow: 0 4px 24px rgba(118, 75, 162, 0.10);
+            border-radius: 1rem;
+            padding: 1.2rem;
+            margin-bottom: 1.3rem;
+            backdrop-filter: blur(9px);
+            -webkit-backdrop-filter: blur(9px);
+            transition: all 0.3s ease;
+        }
+        
+        .filter-header {
+            cursor: pointer;
+            padding: 0.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .filter-header:hover {
+            color: #764ba2;
+        }
+        
+        .filter-header i {
+            transition: transform 0.3s ease;
+        }
+        
+        .filter-header.collapsed i {
+            transform: rotate(-90deg);
+        }
+        
+        .filter-content {
+            max-height: 300px;
+            overflow-y: auto;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            opacity: 1;
+        }
+        
+        .filter-content.collapsed {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        
+        .filter-checkbox {
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            transition: background 0.2s ease;
+        }
+        
+        .filter-checkbox:hover {
+            background: rgba(118, 75, 162, 0.1);
+        }
+        
+        /* Add a nice scrollbar to filter options */
+        .filter-options::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .filter-options::-webkit-scrollbar-track {
+            background: rgba(118, 75, 162, 0.05);
+            border-radius: 10px;
+        }
+        
+        .filter-options::-webkit-scrollbar-thumb {
+            background: rgba(118, 75, 162, 0.2);
+            border-radius: 10px;
+        }
+        
+        .filter-options::-webkit-scrollbar-thumb:hover {
+            background: rgba(118, 75, 162, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); box-shadow: 0 4px 16px 0 rgba(31,38,135,0.10);">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="{{ url_for('static', filename='white_on_trans.png') }}" alt="EduHire Logo"
+                    style="height: 40px; width: 40px; object-fit: contain; margin-right: 12px;">
+                <span style="
+                    font-weight: 900;
+                    font-size: 2rem;
+                    letter-spacing: 2px;
+                    color: #fff;
+                    text-shadow: 0 2px 8px #764ba2, 0 1px 2px #333;
+                    animation: glow 2s infinite alternate;
+                ">
+                    EduHire
+                </span>
+            </a>
+            <div class="ms-auto d-flex align-items-center">
+                <span class="navbar-text text-white fw-semibold me-3">
+                    <i class="fas fa-user-circle me-2"></i>
+                    Welcome, {{ username }}
+                </span>
+                {% if session.get('role') == 'admin' %}
+                    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-light ms-2">
+                        <i class="fas fa-tachometer-alt me-1"></i> Go to Dashboard
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('landing') }}" class="btn btn-outline-light ms-2">
+                        <i class="fas fa-home me-1"></i> Go to Home
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    <div class="container py-4 animate__animated animate__fadeIn">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="mb-3 gradient-text" style="font-weight: 800; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Available Programs</h2>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show animate__animated animate__fadeInDown">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                <div class="search-box mb-4 animate__animated animate__fadeInUp">
+                    <form class="row g-3" id="searchForm" method="GET" action="{{ url_for('courses') }}">
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="searchInput" placeholder="Search programs..." name="search" value="{{ request.args.get('search', '') }}">
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-select" id="fieldSelect" name="field">
+                                <option value="">All Fields</option>
+                                {% for field in fields %}
+                                <option value="{{ field.name }}" {% if request.args.get('field') == field.name %}selected{% endif %}>{{ field.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary w-100 pulse"><i class="fas fa-search me-1"></i>Search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Filters -->
+            <div class="col-lg-3 mb-4">
+                <div class="filter-section animate__animated animate__fadeInLeft">
+                    <h5 class="mb-3"><i class="fas fa-filter me-2"></i>Filters</h5>
+                    
+                    <!-- University Filter -->
+                    <div class="mb-3">
+                        <div class="filter-header" data-bs-toggle="collapse" data-bs-target="#universityFilter">
+                            <h6 class="mb-0"><i class="fas fa-university me-1"></i>University</h6>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div id="universityFilter" class="filter-content collapse show">
+                            <div class="filter-options">
+                                {% for uni in universities %}
+                                <div class="form-check filter-checkbox">
+                                    <input class="form-check-input university-filter" type="checkbox" value="{{ uni.name }}" id="uni-{{ uni.id }}"
+                                        {% if uni.name in request.args.getlist('university') %}checked{% endif %}>
+                                    <label class="form-check-label filter-label" for="uni-{{ uni.id }}">{{ uni.name }}</label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Location Filter -->
+                    <div class="mb-3">
+                        <div class="filter-header" data-bs-toggle="collapse" data-bs-target="#locationFilter">
+                            <h6 class="mb-0"><i class="fas fa-map-marker-alt me-1"></i>Location</h6>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div id="locationFilter" class="filter-content collapse show">
+                            <div class="filter-options">
+                                {% for location in locations %}
+                                <div class="form-check filter-checkbox">
+                                    <input class="form-check-input location-filter" type="checkbox" value="{{ location }}" id="loc-{{ loop.index }}"
+                                        {% if location in request.args.getlist('location') %}checked{% endif %}>
+                                    <label class="form-check-label filter-label" for="loc-{{ loop.index }}">{{ location }}</label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Field of Study Filter -->
+                    <div class="mb-3">
+                        <div class="filter-header" data-bs-toggle="collapse" data-bs-target="#fieldFilter">
+                            <h6 class="mb-0"><i class="fas fa-book me-1"></i>Field of Study</h6>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div id="fieldFilter" class="filter-content collapse show">
+                            <div class="filter-options">
+                                {% for field in fields %}
+                                <div class="form-check filter-checkbox">
+                                    <input class="form-check-input field-filter" type="checkbox" value="{{ field.name }}" id="field-{{ field.id }}"
+                                        {% if field.name in request.args.getlist('field_checkbox') %}checked{% endif %}>
+                                    <label class="form-check-label filter-label" for="field-{{ field.id }}">{{ field.name }}</label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- IELTS Filter -->
+                    <div class="mb-3">
+                        <div class="filter-header" data-bs-toggle="collapse" data-bs-target="#ieltsFilter">
+                            <h6 class="mb-0"><i class="fas fa-language me-1"></i>IELTS Score</h6>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div id="ieltsFilter" class="filter-content collapse show">
+                            <div class="filter-options">
+                                {% for score in ielts_scores %}
+                                <div class="form-check filter-checkbox">
+                                    <input class="form-check-input ielts-filter" type="checkbox" value="{{ score }}" id="ielts-{{ score }}"
+                                        {% if score in request.args.getlist('ielts') %}checked{% endif %}>
+                                    <label class="form-check-label filter-label" for="ielts-{{ score }}">{{ score }}</label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" class="btn btn-primary w-100 mb-2 pulse" id="applyFiltersBtn"><i class="fas fa-filter me-1"></i>Apply Filters</button>
+                    <button type="button" class="btn btn-outline-secondary w-100" id="resetFiltersBtn"><i class="fas fa-undo me-1"></i>Reset Filters</button>
+                </div>
+            </div>
+            <!-- Programs -->
+            <div class="col-lg-9">
+                <div class="row" id="programsContainer">
+                    {% for course in courses %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card animate__animated animate__fadeInUp">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 class="card-title mb-0"><i class="fas fa-graduation-cap me-2"></i>{{ course.name }}</h5>
+                                    <span class="badge badge-field">{{ course.field_of_study.name }}</span>
+                                </div>
+                                <h6 class="card-subtitle mb-3 text-muted">
+                                    <i class="fas fa-university me-1"></i> {{ course.university.name }}<br>
+                                    <i class="fas fa-map-marker-alt me-1"></i> {{ course.university.location }}
+                                </h6>
+                                <p class="program-description mb-3">
+                                    {{ course.description or "No description available" }}
+                                </p>
+                                {% if course.ielts %}
+                                    <p class="mb-2"><strong>IELTS Required:</strong> {{ course.ielts }}</p>
+                                {% endif %}
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="{{ course.url }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-external-link-alt me-1"></i> View Program
+                                    </a>
+                                    {% if course.id in saved_programs %}
+                                        <button class="btn btn-save btn-sm saved" disabled>
+                                            <i class="fas fa-bookmark"></i> Saved
+                                        </button>
+                                    {% else %}
+                                        <form method="POST" action="{{ url_for('save_program', program_id=course.id) }}">
+                                            <button type="submit" class="btn btn-outline-secondary btn-sm btn-save">
+                                                <i class="fas fa-bookmark"></i> Save
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <!-- No programs found message -->
+                <div class="text-center py-5 {% if courses %}d-none{% endif %}" id="noProgramsMessage">
+                    <i class="fas fa-search" style="font-size: 3rem; color: #764ba2;"></i>
+                    <h4 class="mt-3">No programs found</h4>
+                    <p class="text-muted">Try adjusting your search or filters</p>
+                    <a href="{{ url_for('courses') }}" class="btn btn-primary mt-2"><i class="fas fa-search me-1"></i>Browse All</a>
+                </div>
+                <!-- Pagination -->
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item {% if not has_prev %}disabled{% endif %}">
+                            <a class="page-link" href="{{ url_for('courses', page=prev_page, search=request.args.get('search'), field=request.args.get('field'), university=request.args.getlist('university'), location=request.args.getlist('location'), field_checkbox=request.args.getlist('field_checkbox'), ielts=request.args.getlist('ielts')) }}" tabindex="-1">Previous</a>
+                        </li>
+                        {% for p in range(1, total_pages + 1) %}
+                        <li class="page-item {% if p == page %}active{% endif %}">
+                            <a class="page-link" href="{{ url_for('courses', page=p, search=request.args.get('search'), field=request.args.get('field'), university=request.args.getlist('university'), location=request.args.getlist('location'), field_checkbox=request.args.getlist('field_checkbox'), ielts=request.args.getlist('ielts')) }}">{{ p }}</a>
+                        </li>
+                        {% endfor %}
+                        <li class="page-item {% if not has_next %}disabled{% endif %}">
+                            <a class="page-link" href="{{ url_for('courses', page=next_page, search=request.args.get('search'), field=request.args.get('field'), university=request.args.getlist('university'), location=request.args.getlist('location'), field_checkbox=request.args.getlist('field_checkbox'), ielts=request.args.getlist('ielts')) }}">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize filter headers to be collapsed by default
+            const filterHeaders = document.querySelectorAll('.filter-header');
+            filterHeaders.forEach(header => {
+                header.classList.add('collapsed');
+                const target = document.querySelector(header.getAttribute('data-bs-target'));
+                target.classList.add('collapsed');
+                
+                // Add click event to toggle
+                header.addEventListener('click', function() {
+                    this.classList.toggle('collapsed');
+                    const target = document.querySelector(this.getAttribute('data-bs-target'));
+                    target.classList.toggle('collapsed');
+                });
+            });
+            
+            // Apply filters button
+            document.getElementById('applyFiltersBtn').addEventListener('click', applyFilters);
+            
+            // Reset filters button
+            document.getElementById('resetFiltersBtn').addEventListener('click', resetFilters);
+            
+            // Function to apply filters
+            function applyFilters() {
+                const search = document.getElementById('searchInput').value;
+                const field = document.getElementById('fieldSelect').value;
+                
+                // Get selected filters (degree_type and duration removed)
+                const universities = Array.from(document.querySelectorAll('.university-filter:checked')).map(cb => cb.value);
+                const locations = Array.from(document.querySelectorAll('.location-filter:checked')).map(cb => cb.value);
+                const fields = Array.from(document.querySelectorAll('.field-filter:checked')).map(cb => cb.value);
+                const ieltsScores = Array.from(document.querySelectorAll('.ielts-filter:checked')).map(cb => cb.value);
+                
+                // Build URL with all filters
+                let url = "{{ url_for('courses') }}?";
+                if (search) url += `search=${encodeURIComponent(search)}&`;
+                if (field) url += `field=${encodeURIComponent(field)}&`;
+                
+                universities.forEach(uni => {
+                    url += `university=${encodeURIComponent(uni)}&`;
+                });
+                
+                locations.forEach(loc => {
+                    url += `location=${encodeURIComponent(loc)}&`;
+                });
+                
+                fields.forEach(f => {
+                    url += `field_checkbox=${encodeURIComponent(f)}&`;
+                });
+                
+                ieltsScores.forEach(score => {
+                    url += `ielts=${encodeURIComponent(score)}&`;
+                });
+                
+                // Remove trailing & if exists
+                if (url.endsWith('&')) {
+                    url = url.slice(0, -1);
+                }
+                
+                // Navigate to the filtered URL
+                window.location.href = url;
+            }
+            
+            // Function to reset all filters
+            function resetFilters() {
+                // Uncheck all checkboxes
+                document.querySelectorAll('.form-check-input').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                
+                // Reset search and field select
+                document.getElementById('searchInput').value = '';
+                document.getElementById('fieldSelect').value = '';
+                
+                // Navigate to base courses URL
+                window.location.href = "{{ url_for('courses') }}";
+            }
+            
+            // Toggle no programs message based on initial state
+            toggleNoProgramsMessage();
+        });
+        
+        function toggleNoProgramsMessage() {
+            const programsContainer = document.getElementById('programsContainer');
+            const noProgramsMessage = document.getElementById('noProgramsMessage');
+            if (programsContainer.children.length === 0) {
+                noProgramsMessage.classList.remove('d-none');
+            } else {
+                noProgramsMessage.classList.add('d-none');
+            }
+        }
+    </script>
+    <style>
+        /* Ripple Effect for all .btn */
+        .btn {
+            position: relative;
+            overflow: hidden;
+        }
+        .btn .ripple-effect {
+            position: absolute;
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple-animate 0.7s linear;
+            background: rgba(255, 107, 107, 0.33);
+            pointer-events: none;
+            z-index: 1;
+        }
+        @keyframes ripple-animate {
+            to {
+                transform: scale(2.7);
+                opacity: 0;
+            }
+        }
+        /* Pulse animation for CTA and filter buttons */
+        .pulse {
+            animation: pulse-btn 1.2s infinite;
+        }
+        @keyframes pulse-btn {
+            0% { box-shadow: 0 0 0 0 rgba(255,107,107,0.15);}
+            70% { box-shadow: 0 0 0 14px rgba(255,107,107,0);}
+            100% { box-shadow: 0 0 0 0 rgba(255,107,107,0.15);}
+        }
+    </style>
+    <script>
+        // Ripple effect for all .btn
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.btn').forEach(button => {
+                button.addEventListener('click', function (e) {
+                    const x = e.clientX - e.target.getBoundingClientRect().left;
+                    const y = e.clientY - e.target.getBoundingClientRect().top;
+                    const ripple = document.createElement('span');
+                    ripple.classList.add('ripple-effect');
+                    ripple.style.left = `${x}px`;
+                    ripple.style.top = `${y}px`;
+                    this.appendChild(ripple);
+                    setTimeout(() => ripple.remove(), 800);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
